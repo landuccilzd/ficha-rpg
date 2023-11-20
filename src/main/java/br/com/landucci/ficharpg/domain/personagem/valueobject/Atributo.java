@@ -51,6 +51,11 @@ public class Atributo {
         this.modificador = calcularModificador();
     }
 
+    public void aumentarAtributo(Integer valor) {
+        this.valor += valor;
+        this.modificador = calcularModificador();
+    }
+
     public Integer getValor() {
         return valor;
     }
