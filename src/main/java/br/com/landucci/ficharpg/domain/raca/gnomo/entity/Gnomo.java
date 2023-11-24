@@ -6,6 +6,11 @@ import br.com.landucci.ficharpg.domain.raca.AbstractRaca;
 
 public class Gnomo extends AbstractRaca {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3445636812641903199L;
+
 	public Gnomo() {
 		this("Gnomo");
 	}

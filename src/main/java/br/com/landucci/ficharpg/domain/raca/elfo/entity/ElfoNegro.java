@@ -5,6 +5,11 @@ import br.com.landucci.ficharpg.domain.raca.IRaca;
 
 public class ElfoNegro extends Elfo implements IRaca {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3944884375304110813L;
+
 	public ElfoNegro() {
 		super("Elfo Negro (Drow)");
 	}

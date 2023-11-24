@@ -6,6 +6,11 @@ import br.com.landucci.ficharpg.domain.raca.AbstractRaca;
 
 public class Tiefling extends AbstractRaca {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6666641739208563000L;
+
 	public Tiefling() {
 		this("Tiefling");
 	}

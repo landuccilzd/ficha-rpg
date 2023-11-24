@@ -6,6 +6,11 @@ import br.com.landucci.ficharpg.domain.raca.AbstractRaca;
 
 public class Humano extends AbstractRaca {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1514334474195610526L;
+
 	public Humano() {
 		this("Humano");
 	}

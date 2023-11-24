@@ -5,6 +5,11 @@ import br.com.landucci.ficharpg.domain.raca.IRaca;
 
 public class GnomoFloresta extends Gnomo implements IRaca {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4713748054451099939L;
+
 	public GnomoFloresta() {
 		super("Gnomo da Floresta");
 	}

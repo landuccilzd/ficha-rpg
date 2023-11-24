@@ -1,11 +1,16 @@
 package br.com.landucci.ficharpg.domain.raca.draconiano.entity;
 
+import java.io.Serial;
+
 import br.com.landucci.ficharpg.domain.personagem.entity.Personagem;
 import br.com.landucci.ficharpg.domain.personagem.valueobject.Idioma;
 import br.com.landucci.ficharpg.domain.raca.AbstractRaca;
 
 public class Draconiano extends AbstractRaca {
-	
+
+	@Serial
+	private static final long serialVersionUID = -1269752880810299595L;
+
 	public Draconiano() {
 		this("Draconiano");
 	}

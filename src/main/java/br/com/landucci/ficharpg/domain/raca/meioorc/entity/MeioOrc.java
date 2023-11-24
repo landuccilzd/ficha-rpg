@@ -6,6 +6,11 @@ import br.com.landucci.ficharpg.domain.raca.AbstractRaca;
 
 public class MeioOrc extends AbstractRaca {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7576551134894707132L;
+
 	public MeioOrc() {
 		this("Meio Orc");
 	}
