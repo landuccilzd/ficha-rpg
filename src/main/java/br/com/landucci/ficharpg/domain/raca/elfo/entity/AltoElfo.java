@@ -5,6 +5,11 @@ import br.com.landucci.ficharpg.domain.raca.IRaca;
 
 public class AltoElfo extends Elfo implements IRaca {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1018198622630377008L;
+
 	public AltoElfo() {
 		super("Alto Elfo");
 	}

@@ -5,6 +5,11 @@ import br.com.landucci.ficharpg.domain.raca.IRaca;
 
 public class Robusto extends Halfling implements IRaca {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -300687411647644935L;
+
 	public Robusto() {
 		super("Robusto");
 	}

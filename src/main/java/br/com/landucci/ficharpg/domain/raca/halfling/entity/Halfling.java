@@ -6,6 +6,11 @@ import br.com.landucci.ficharpg.domain.raca.AbstractRaca;
 
 public class Halfling extends AbstractRaca {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3389607357335361855L;
+
 	public Halfling() {
 		this("Halfling");
 	}

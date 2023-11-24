@@ -1,10 +1,18 @@
 package br.com.landucci.ficharpg.domain.raca.anao.entity;
 
+import java.io.Serial;
+
 import br.com.landucci.ficharpg.domain.personagem.entity.Personagem;
 import br.com.landucci.ficharpg.domain.personagem.valueobject.Idioma;
 import br.com.landucci.ficharpg.domain.raca.AbstractRaca;
 
 public class Anao extends AbstractRaca {
+
+	/**
+	 * 
+	 */
+	@Serial
+	private static final long serialVersionUID = -6653407243494419193L;
 
 	public Anao() {
 		this("Anão");

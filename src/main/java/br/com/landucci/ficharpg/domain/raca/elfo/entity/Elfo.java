@@ -6,6 +6,11 @@ import br.com.landucci.ficharpg.domain.raca.AbstractRaca;
 
 public class Elfo extends AbstractRaca {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3995361400315677060L;
+
 	public Elfo() {
 		this("Elfo");
 	}
@@ -16,9 +21,6 @@ public class Elfo extends AbstractRaca {
 
 	@Override
 	public void inicializarRaca(Personagem personagem) {
-		
-		System.out.println("\nIniciando Elfo");
-		
 		personagem.aumentarDestreza(2);
 		personagem.alterarDeslocamento(9D);
 		

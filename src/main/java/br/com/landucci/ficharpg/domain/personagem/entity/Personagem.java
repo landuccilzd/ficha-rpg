@@ -1,5 +1,6 @@
 package br.com.landucci.ficharpg.domain.personagem.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,24 +11,36 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.landucci.ficharpg.domain.armadura.entity.Armadura;
-import br.com.landucci.ficharpg.domain.personagem.valueobject.Atributo;
+import br.com.landucci.ficharpg.domain.classe.entity.IClasse;
+import br.com.landucci.ficharpg.domain.habilidade.entity.Carisma;
+import br.com.landucci.ficharpg.domain.habilidade.entity.Constituicao;
+import br.com.landucci.ficharpg.domain.habilidade.entity.Destreza;
+import br.com.landucci.ficharpg.domain.habilidade.entity.Forca;
+import br.com.landucci.ficharpg.domain.habilidade.entity.IHabilidade;
+import br.com.landucci.ficharpg.domain.habilidade.entity.Inteligencia;
+import br.com.landucci.ficharpg.domain.habilidade.entity.Sabedoria;
 import br.com.landucci.ficharpg.domain.personagem.valueobject.Idioma;
 import br.com.landucci.ficharpg.domain.personagem.valueobject.Nivel;
+import br.com.landucci.ficharpg.domain.personagem.valueobject.Riqueza;
+import br.com.landucci.ficharpg.domain.personagem.valueobject.TendenciaMoral;
+import br.com.landucci.ficharpg.domain.personagem.valueobject.TendenciaOrdem;
 import br.com.landucci.ficharpg.domain.raca.IRaca;
 
 public class Personagem implements Serializable {
 
-	private static final long serialVersionUID = -2410949597459193969L;
+	@Serial
+    private static final long serialVersionUID = -2410949597459193969L;
 	
-	private String nomePersonagem;
-    private String nomeJogador;
-    private Integer idade;
-    private Double altura;
-    private Double peso;
-    private String olhos;
-    private String pele;
-    private String cabelo;
-    private String[] tendencia;
+	private final String nomePersonagem;
+    private final String nomeJogador;
+    private final Integer idade;
+    private final Double altura;
+    private final Double peso;
+    private final String olhos;
+    private final String pele;
+    private final String cabelo;
+    private TendenciaOrdem tendenciaOrdem;
+    private TendenciaMoral tendenciaMoral;
     private String[] tracosPersonalidade;
     private String ideais;
     private String ligacoes;
@@ -36,30 +49,27 @@ public class Personagem implements Serializable {
     private String historia;
     
     private IRaca raca = null;
+    private final List<IClasse> classes = new ArrayList<>();
     
-    private Nivel nivel;
-    private Integer experiencia;
-    private Atributo forca;
-    private Atributo destreza;
-    private Atributo constituicao;
-    private Atributo inteligencia;
-    private Atributo sabedoria;
-    private Atributo carisma;
-    private Integer inspiracao;
-    private Integer sabedoriaPassiva;
-    private Integer classeArmadura;
-    private Integer iniciativa;
-    private Double deslocamento;
-    private Integer pvTotal; // Classe
-    private Integer pvAtual;
-    private Integer pvTemporario;
-    private Integer dvTotal;
-    private Integer dvAtual;
-    private Integer pontosCobre; //Classe
-    private Integer pontosPrata;
-    private Integer pontosElectro;
-    private Integer pontosOuro;
-    private Integer pontosPlatina;
+    private Integer experiencia = 0;
+    private final Nivel nivel;
+    private final IHabilidade forca;
+    private final IHabilidade destreza;
+    private final IHabilidade constituicao;
+    private final IHabilidade inteligencia;
+    private final IHabilidade sabedoria;
+    private final IHabilidade carisma;
+    private Integer inspiracao = 0;
+    private Integer sabedoriaPassiva = 0;
+    private Integer classeArmadura = 0;
+    private Integer iniciativa = 0;
+    private Double deslocamento = 0D;
+    private Integer pvTotal = 0;
+    private Integer pvAtual = 0;
+    private Integer pvTemporario = 0;
+    private Integer dvTotal = 0;
+    private Integer dvAtual = 0;
+    private final Riqueza riqueza = new Riqueza();
     private Armadura armaduraVestida;
     
     private List<Idioma> idiomas = new ArrayList<Idioma>();
@@ -77,7 +87,8 @@ public class Personagem implements Serializable {
 //    private List magias;
 
     public Personagem(String nomeJogador, String nomePersonagem, Integer idade, Double altura, Double peso,
-    		String olhos, String pele, String cabelo, IRaca raca) {
+    		String olhos, String pele, String cabelo, IRaca raca, TendenciaOrdem tendenciaOrdem, TendenciaMoral tendenciaMoral,
+    		IClasse classe) {
         this.nomeJogador = nomeJogador;        
         this.nomePersonagem = nomePersonagem;
         this.idade = idade;
@@ -86,20 +97,30 @@ public class Personagem implements Serializable {
         this.olhos = olhos;
         this.pele = pele;
         this.cabelo = cabelo;
-        this.experiencia = 0;
-        this.nivel = new Nivel(this.experiencia);
-        this.forca = new Atributo(0);
-        this.destreza = new Atributo(0);
-        this.constituicao = new Atributo(0);
-        this.inteligencia = new Atributo(0);
-        this.sabedoria = new Atributo(0);
-        this.carisma = new Atributo(0);
         this.pvTotal = 0;
-
+        this.nivel = new Nivel(this.experiencia);
+        this.forca = new Forca();
+        this.destreza = new Destreza();
+        this.constituicao = new Constituicao();
+        this.inteligencia = new Inteligencia();
+        this.sabedoria = new Sabedoria();
+        this.carisma = new Carisma();
+        this.tendenciaOrdem = tendenciaOrdem;
+        this.tendenciaMoral = tendenciaMoral;
         this.raca = raca;
-        this.raca.inicializarRaca(this);
+        this.adicionarClass(classe);
     }
 
+    public void inicializar() {
+    	this.sabedoriaPassiva = 10 + this.sabedoria.getModificador();
+    	//TODO: Implementar +2 se tiver proficiencia em Percepcao
+    	
+        this.raca.inicializarRaca(this);
+        this.classes.forEach(classe -> {
+        	classe.inicializarClasse(this);
+        });
+    }
+    
     public void evoluir() {
         this.experiencia += 1;
         //TODO: Implementar
@@ -122,6 +143,13 @@ public class Personagem implements Serializable {
         this.destreza.aumentarAtributo(destreza);
         this.iniciativa = this.destreza.getModificador();
     }    
+
+    public void adicionarClass(IClasse classe) {
+        if (this.classes.contains(classe)) {
+            throw new RuntimeException("Esse personagem ja possui essa classe");
+        }
+        this.classes.add(classe);
+    }
 
     public void alterarConstituicao(Integer constituicao) {
         this.constituicao.alterarAtributo(constituicao);
@@ -154,10 +182,6 @@ public class Personagem implements Serializable {
     public void aumentarCarisma(Integer carisma) {
         this.carisma.aumentarAtributo(carisma);
     }    
-
-    public void definirTendencia(String[] tendencia) {
-    	this.tendencia = tendencia;
-    }
     
     public void alterarInspiracao(Integer inspiracao) {
         this.inspiracao = inspiracao;
@@ -176,6 +200,13 @@ public class Personagem implements Serializable {
     
     public void alterarDeslocamento(Double deslocamento) {
     	this.deslocamento = deslocamento;
+    }
+
+    public void alterarPvTotal(Integer qtde) {
+        if (qtde <= 0) {
+            throw new RuntimeException("Informe a quantidade de PV a ser aumentada.");
+        }
+    	this.pvTotal = qtde;
     }
     
     public void aumentarPvTotal(Integer qtde) {
@@ -245,170 +276,162 @@ public class Personagem implements Serializable {
     	}
     	this.idiomas.add(idioma);
     }
-    
-	public String getNomePersonagem() {
-		return nomePersonagem;
+
+    public String getNomePersonagem() {
+        return nomePersonagem;
+    }
+
+    public String getNomeJogador() {
+        return nomeJogador;
+    }
+
+    public Integer getIdade() {
+        return idade;
+    }
+
+    public Double getAltura() {
+        return altura;
+    }
+
+    public Double getPeso() {
+        return peso;
+    }
+
+    public String getOlhos() {
+        return olhos;
+    }
+
+    public String getPele() {
+        return pele;
+    }
+
+    public String getCabelo() {
+        return cabelo;
+    }
+
+    public TendenciaOrdem getTendenciaOrdem() {
+		return tendenciaOrdem;
 	}
 
-	public String getNomeJogador() {
-		return nomeJogador;
-	}
-
-	public Integer getIdade() {
-		return idade;
-	}
-
-	public Double getAltura() {
-		return altura;
-	}
-
-	public Double getPeso() {
-		return peso;
-	}
-
-	public String getOlhos() {
-		return olhos;
-	}
-
-	public String getPele() {
-		return pele;
-	}
-
-	public String getCabelo() {
-		return cabelo;
-	}
-
-	public String[] getTendencia() {
-		return tendencia;
+	public TendenciaMoral getTendenciaMoral() {
+		return tendenciaMoral;
 	}
 
 	public String[] getTracosPersonalidade() {
-		return tracosPersonalidade;
-	}
+        return tracosPersonalidade;
+    }
 
-	public String getIdeais() {
-		return ideais;
-	}
+    public String getIdeais() {
+        return ideais;
+    }
 
-	public String getLigacoes() {
-		return ligacoes;
-	}
+    public String getLigacoes() {
+        return ligacoes;
+    }
 
-	public String getDefeitos() {
-		return defeitos;
-	}
+    public String getDefeitos() {
+        return defeitos;
+    }
 
-	public String getAparencia() {
-		return aparencia;
-	}
+    public String getAparencia() {
+        return aparencia;
+    }
 
-	public String getHistoria() {
-		return historia;
-	}
+    public String getHistoria() {
+        return historia;
+    }
 
-	public IRaca getRaca() {
-		return raca;
-	}
+    public IRaca getRaca() {
+        return raca;
+    }
 
-	public Nivel getNivel() {
-		return nivel;
-	}
+    public List<IClasse> getClasses() {
+        return classes;
+    }
 
-	public Integer getExperiencia() {
-		return experiencia;
-	}
+    public Nivel getNivel() {
+        return nivel;
+    }
 
-	public Atributo getForca() {
-		return forca;
-	}
+    public Integer getExperiencia() {
+        return experiencia;
+    }
 
-	public Atributo getDestreza() {
-		return destreza;
-	}
+    public IHabilidade getForca() {
+        return forca;
+    }
 
-	public Atributo getConstituicao() {
-		return constituicao;
-	}
+    public IHabilidade getDestreza() {
+        return destreza;
+    }
 
-	public Atributo getInteligencia() {
-		return inteligencia;
-	}
+    public IHabilidade getConstituicao() {
+        return constituicao;
+    }
 
-	public Atributo getSabedoria() {
-		return sabedoria;
-	}
+    public IHabilidade getInteligencia() {
+        return inteligencia;
+    }
 
-	public Atributo getCarisma() {
-		return carisma;
-	}
+    public IHabilidade getSabedoria() {
+        return sabedoria;
+    }
 
-	public Integer getInspiracao() {
-		return inspiracao;
-	}
+    public IHabilidade getCarisma() {
+        return carisma;
+    }
 
-	public Integer getSabedoriaPassiva() {
-		return sabedoriaPassiva;
-	}
+    public Integer getInspiracao() {
+        return inspiracao;
+    }
 
-	public Integer getClasseArmadura() {
-		return classeArmadura;
-	}
+    public Integer getSabedoriaPassiva() {
+        return sabedoriaPassiva;
+    }
 
-	public Integer getIniciativa() {
-		return iniciativa;
-	}
+    public Integer getClasseArmadura() {
+        return classeArmadura;
+    }
 
-	public Double getDeslocamento() {
-		return deslocamento;
-	}
+    public Integer getIniciativa() {
+        return iniciativa;
+    }
 
-	public Integer getPvTotal() {
-		return pvTotal;
-	}
+    public Double getDeslocamento() {
+        return deslocamento;
+    }
 
-	public Integer getPvAtual() {
-		return pvAtual;
-	}
+    public Integer getPvTotal() {
+        return pvTotal;
+    }
 
-	public Integer getPvTemporario() {
-		return pvTemporario;
-	}
+    public Integer getPvAtual() {
+        return pvAtual;
+    }
 
-	public Integer getDvTotal() {
-		return dvTotal;
-	}
+    public Integer getPvTemporario() {
+        return pvTemporario;
+    }
 
-	public Integer getDvAtual() {
-		return dvAtual;
-	}
+    public Integer getDvTotal() {
+        return dvTotal;
+    }
 
-	public Integer getPontosCobre() {
-		return pontosCobre;
-	}
+    public Integer getDvAtual() {
+        return dvAtual;
+    }
 
-	public Integer getPontosPrata() {
-		return pontosPrata;
-	}
+    public Riqueza getRiqueza() {
+        return riqueza;
+    }
 
-	public Integer getPontosElectro() {
-		return pontosElectro;
-	}
-
-	public Integer getPontosOuro() {
-		return pontosOuro;
-	}
-
-	public Integer getPontosPlatina() {
-		return pontosPlatina;
-	}
-
-	public Armadura getArmaduraVestida() {
-		return armaduraVestida;
-	}
+    public Armadura getArmaduraVestida() {
+        return armaduraVestida;
+    }
 
     public List<Idioma> getIdiomas() {
-		return idiomas;
-	}
+        return idiomas;
+    }
 
     public String toJSON() {
     	ObjectMapper mapper = new ObjectMapper();
@@ -425,9 +448,7 @@ public class Personagem implements Serializable {
     
 	@Override
     public String toString() {
-		return nomePersonagem + " é uma <Raça>/<Classe> de " + idade + " anos, " + altura + "m de altura e " + peso + "kg. Tem a pele " + pele + ", olhos " + olhos + " e cabelos " + cabelo;
+		return nomePersonagem + " é um(a) <Raça>/<Classe> de " + idade + " anos, " + altura + "m de altura e " + peso + "kg. Tem a pele " + pele + ", olhos " + olhos + " e cabelos " + cabelo;
     }
 
-    
 }
-

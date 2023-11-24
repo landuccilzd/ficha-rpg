@@ -1,15 +1,38 @@
-package br.com.landucci.ficharpg.domain.personagem.valueobject;
+package br.com.landucci.ficharpg.domain.habilidade.entity;
 
-public class Atributo {
+public class AbstractHabilidade implements IHabilidade {
 
-    private Integer valor;
-    private Integer modificador;
+    protected final String nome;
+    protected Integer valor = 0;
+    protected Integer modificador = 0;
 
-    public Atributo(Integer valor) {
-        alterarAtributo(valor);
+    public AbstractHabilidade(String nome) {
+        this.nome = nome;
     }
 
-    private Integer calcularModificador() {
+    @Override
+    public void alterarAtributo(Integer valor) {
+        this.valor = valor;
+        this.modificador = calcularModificador();
+    }
+
+    @Override
+    public void aumentarAtributo(Integer valor) {
+        this.valor += valor;
+        this.modificador = calcularModificador();
+    }
+
+    @Override
+    public Integer getValor() {
+        return this.valor;
+    }
+
+    @Override
+    public Integer getModificador() {
+        return modificador;
+    }
+
+    public Integer calcularModificador() {
         switch (this.valor) {
             case 1: {
                 return Integer.valueOf(-5);
@@ -43,24 +66,11 @@ public class Atributo {
                 return Integer.valueOf(10);
             } default:
                 return Integer.valueOf(0);
-        }        
+        }
     }
 
-    public void alterarAtributo(Integer valor) {
-        this.valor = valor;
-        this.modificador = calcularModificador();
+    @Override
+    public String toString() {
+        return nome + " - " + valor + " [" + modificador + "]";
     }
-
-    public void aumentarAtributo(Integer valor) {
-        this.valor += valor;
-        this.modificador = calcularModificador();
-    }
-
-    public Integer getValor() {
-        return valor;
-    }
-
-    public Integer getModificador() {
-        return modificador;
-    }   
 }

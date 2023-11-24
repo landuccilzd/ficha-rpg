@@ -6,6 +6,11 @@ import br.com.landucci.ficharpg.domain.raca.AbstractRaca;
 
 public class MeioElfo extends AbstractRaca {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3980840276971181029L;
+
 	public MeioElfo() {
 		this("Meio Elfo");
 	}
